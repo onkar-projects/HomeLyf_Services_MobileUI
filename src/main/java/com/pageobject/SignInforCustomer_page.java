@@ -1,31 +1,30 @@
 package com.pageobject;
 
-import org.openqa.selenium.Alert;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 
+import com.base.Base_Class;
+
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.pagefactory.AndroidFindBy;
-import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 
-public class SignInforCustomer_page {
-	public AndroidDriver driver;
+public class SignInforCustomer_page extends Base_Class {
 
-	@AndroidFindBy(xpath = "(//android.widget.Button[@content-desc=\"Continue as a Customer\"])")
-	private WebElement continue_as_a_customer;
+	@AndroidFindBy(xpath = "(//android.widget.Button[@content-desc='Continue as a Customer'])")
+	 WebElement continue_as_a_customer;
 
 	@AndroidFindBy(className = "(//android.widget.EditText)[2]")
-	private WebElement Emailid;
+	 WebElement Emailid;
 
 	@AndroidFindBy(className = "(//android.widget.EditText)[3]")
-	private WebElement Password;
+	 WebElement Password;
 
 	@AndroidFindBy(xpath = "(//android.widget.Button[@content-desc=\"Sign In\"])")
-	private WebElement Signintab;
+	 WebElement Signintab;
 
 	public SignInforCustomer_page(AndroidDriver driver) {
-		this.driver = driver;
-		PageFactory.initElements(new AppiumFieldDecorator(driver), this);
+     	this.driver = driver;
+		PageFactory.initElements(driver, this);
 	}
 
 	public void LoginDetails() throws InterruptedException {
