@@ -1,7 +1,10 @@
 package com.pageobject;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
+import org.testng.annotations.DataProvider;
 
 import com.Utility.Library;
 import com.base.Base_Class;
@@ -12,57 +15,55 @@ import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 
 public class SignUpforCustomer_page extends Base_Class {
 	Library lb = new Library();
-
-	@AndroidFindBy(accessibility = "Continue as a Customer")
-	WebElement continue_as_a_customer;
-	@AndroidFindBy(accessibility = "Don't have an account?")
-	WebElement clickforsignup;
-	@AndroidFindBy(xpath="//android.view.View[@content-desc=\"Sign Up\"]") 
-	WebElement signupheadline;
-	@AndroidFindBy(xpath = "(//android.widget.EditText)[1]")
-	WebElement Name_tab;
-	@AndroidFindBy(xpath = "(//android.widget.EditText)[2]")
-	WebElement Email_tab;
-	@AndroidFindBy(xpath = "(//android.widget.EditText)[3]")
-	WebElement Mobile_num_tab;
-	@AndroidFindBy(xpath = "(//android.widget.EditText)[4]")
-	WebElement Password_tab;
-	@AndroidFindBy(xpath = "(//android.widget.EditText)[5]")
-	WebElement Confirm_Password;
-	@AndroidFindBy(xpath = "//android.widget.Button[@content-desc=\"Sign Up\"]")
-	WebElement Signuptab;	
-	
+	AndroidDriver driver;
+	Customer_Locators wb;
+	public static Logger Logger = LogManager.getLogger(SignUpforCustomer_page.class);
 
 	public SignUpforCustomer_page(AndroidDriver driver) {
 		this.driver = driver;
-		PageFactory.initElements(new AppiumFieldDecorator(driver), this);}
+		wb = new Customer_Locators(driver);
+		PageFactory.initElements(new AppiumFieldDecorator(driver), this);
+	}
+    
 
-	public void SignupDetails_Customer() throws InterruptedException {
+	public Library Customer_signupDetails(String name, String emailid, String number, String password, String confirmpassword) {
+		    lb.custom_Click(wb.Continue_as_a_customer_button, "continue_as_a_customer");
+			lb.acceptAlert();
+			lb.custom_Click(wb.Dont_have_an_Account_linktext, "Don't have an Account");
+//			boolean signupheading = wb.Sign_Up_Page_Heading.isDisplayed();
+//			System.out.println("SignUp heading is present = " + signupheading);
+//			Logger.info("SignUp heading is present");
+			
+			wb.SignUp_Name_textbox.click();
+			lb.enterText(wb.SignUp_Name_textbox, name);
+			
+			lb.explicitWait(driver, wb.Signup_Email_textbox, 20);
+			wb.Signup_Email_textbox.click();
+			lb.enterText(wb.Signup_Email_textbox, emailid);
+			
+			lb.explicitWait(driver, wb.Signup_Mobile_number_textbox, 20);
+			lb.enterText(wb.Signup_Mobile_number_textbox, number );
+			
+			lb.explicitWait(driver, wb.Signup_Password_textbox, 20);
+			wb.Signup_Password_textbox.click();
+			lb.enterText(wb.Signup_Password_textbox, password);
+			
+			lb.explicitWait(driver, wb.Signup_Confirm_Password_textbox, 20);
+			wb.Signup_Confirm_Password_textbox.click();
+			lb.enterText(wb.Signup_Confirm_Password_textbox, confirmpassword);
 
-		continue_as_a_customer.click();
-		lb.acceptAlert();
-		clickforsignup.click();
-		boolean signupheading= signupheadline.isDisplayed();
-		System.out.println("SignUp heading is present = "+ signupheading);
-		Thread.sleep(3000);
-		Name_tab.sendKeys("Master Blaster");
-		Thread.sleep(3000);
-		Email_tab.sendKeys("masterblaster@gmail.com");
-		Thread.sleep(3000);
-		Mobile_num_tab.sendKeys("4532174309");
-		Thread.sleep(3000);
-		Password_tab.sendKeys("String@123");
-		Thread.sleep(3000);
-		//checkpassword.click();
-		Thread.sleep(3000);
-		Confirm_Password.sendKeys("String@123");
-		Thread.sleep(3000);
-		//checkconfirmpassword.click();
-		Thread.sleep(3000);
-		Signuptab.click();
-		Thread.sleep(3000);
+			lb.explicitWait(driver, wb.Signup_Click_Button, 20);
+			lb.custom_Click(wb.Signup_Click_Button, "Signup");
+			
+			//toast message to generate toast message uses tag name = android.widget.Toast
+			
+//			lb.explicitWait(driver, wb.HomePage, 20);
+//			boolean homepagedisplay = wb.HomePage.isDisplayed();
+//			System.out.println("HomePage is present = " + homepagedisplay);
+			Logger.info("Customer Signed Up Successfully.");
 
-		
-		
-		
-	}}
+			Logger.info("Customer redirected to HomePage Successfully.");
+            
+		 return lb;
+	}
+}
